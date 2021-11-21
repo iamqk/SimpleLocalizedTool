@@ -28,7 +28,7 @@
     NSLog(@"%@",[pboard types]);
     
     inView = YES;
-
+    
     [self setHighlighted:YES];
     return NSDragOperationEvery;
 }
@@ -41,28 +41,31 @@
         NSLog(@"%@",paths);
         NSLog(@"end");
         
-        
-        NSString* fileName = paths.firstObject;
-        
-        if ([fileName hasSuffix:@".m"]||[fileName hasSuffix:@".mm"]) {
-            NSError* error;
-            NSData* data = [NSData dataWithContentsOfFile:fileName options:NSDataReadingMappedAlways error:&error];
-            if (error) {
-                NSLog(@"%@",error);
-            }
-            else
-            {
-                NSString* content = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                NSDictionary* final = [LocalizedStringHandle handleOriginFileContent:content];
-                if (self.getNewTextBlock) {
-                    self.getNewTextBlock(final,fileName);
+        for (NSString *path in paths) {
+            NSFileManager *fileM = [NSFileManager defaultManager];
+            NSArray *files = [fileM subpathsAtPath:path];
+            for (NSString *file in files) {
+                if ([file hasSuffix:@".m"]||[file hasSuffix:@".mm"]) {
+                    NSError* error;
+                    NSData* data = [NSData dataWithContentsOfFile:[NSString stringWithFormat:@"%@/%@", path, file] options:NSDataReadingMappedAlways error:&error];
+                    if (error) {
+                        NSLog(@"%@",error);
+                    }
+                    else
+                    {
+                        NSString* content = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                        NSDictionary* final = [LocalizedStringHandle handleOriginFileContent:content];
+                        if (self.getNewTextBlock) {
+                            self.getNewTextBlock(final,file, path);
+                            //                            self.getNewTextBlock(final,file);
+                        }
+                    }
                 }
-                
+                else
+                {
+                    NSLog(@"文件格式不支持");
+                }
             }
-        }
-        else
-        {
-            NSLog(@"文件格式不支持");
         }
     }
 }

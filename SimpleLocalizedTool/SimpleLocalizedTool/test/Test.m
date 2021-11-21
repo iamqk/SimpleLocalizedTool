@@ -28,8 +28,11 @@
         NSString* h = NSLocalizedString(@"这是一个又追加测试", nil);
         NSString* i = NSLocalizedStringFromTable( @"最后一再条追加测试书写规范，空格，特殊符号(\"{@#$)等等"  ,   @"OtherFile"  ,   nil);
 
-        [NSString stringWithFormat:@"%@", NSLocalizedString(@"test 1", @"")];
-//        [NSString stringWithFormat:@"%@", NSLocalizedString(@"test 2")];
+        [NSString stringWithFormat:@"%@", NSLocalizedString(@"fghi", @"")];
+        [NSString stringWithFormat:@"%@", NSLocalizedString(@"test 3")];
+
+        [NSString stringWithFormat:@"%@", NSLocalizedString(@"abcde", @"")];
+        [NSString stringWithFormat:@"%@", NSLocalizedString(@"tes 4")];
 
         [self handle:a];
         [self handle:b];

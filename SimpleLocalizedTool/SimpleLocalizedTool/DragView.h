@@ -15,6 +15,7 @@
 
 @property (assign, setter=setHighlighted:) BOOL isHighlighted;
 
-@property (nonatomic, strong) void (^ getNewTextBlock)(NSDictionary* final, NSString* filepath);
+@property (nonatomic, strong) void (^ getNewTextBlock)(NSDictionary* final, NSString* filepath, NSString *parentPath);
+//@property (nonatomic, strong) void (^ getNewTextBlock)(NSDictionary* final, NSString* filepath);
 
 @end

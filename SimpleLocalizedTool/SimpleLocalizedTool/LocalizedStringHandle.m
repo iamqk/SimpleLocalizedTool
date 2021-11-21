@@ -12,10 +12,13 @@
 
 + (NSDictionary *)handleOriginFileContent:(NSString *)content
 {
- 
+    
     //((\s*@".*?"\s*,?\s*)|\s*nil\s*,?\s*){2,3}
     NSError* error;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"NSLocalizedString\\s*\\(((\\s*@\".*?\"\\s*,?\\s*)|\\s*nil\\s*,?\\s*){2,3}\\)|NSLocalizedStringFromTable\\s*\\(((\\s*@\".*?\"\\s*,?\\s*)|\\s*nil\\s*,?\\s*){2,3}\\)" options:NSRegularExpressionCaseInsensitive error:&error];
+    //    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"NSLocalizedString\\s*\\(((\\s*@\".*?\"\\s*,?\\s*)|\\s*nil\\s*,?\\s*){2,3}\\)|NSLocalizedStringFromTable\\s*\\(((\\s*@\".*?\"\\s*,?\\s*)|\\s*nil\\s*,?\\s*){2,3}\\)" options:NSRegularExpressionCaseInsensitive error:&error];
+    
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"NSLocalizedString\\s*\\(((\\s*@\".*?\"\\s*,?\\s*)|\\s*nil\\s*,?\\s*){2,3}\\)|NSLocalizedString\\s*\\((\\s*@\".*?\"\\s*\\s*)\\)" options:NSRegularExpressionCaseInsensitive error:&error];
+    
     NSArray* array = [regex matchesInString:content options:kNilOptions range:NSMakeRange(0, content.length)];
     NSMutableArray* results = [NSMutableArray array];
     
@@ -30,13 +33,12 @@
     [results enumerateObjectsUsingBlock:^(NSString*  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         NSError* error;
-//        NSMutableString* string = [obj mutableCopy];
         NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"(?<=@\").*?(?=((?<!\\\\)\"))|nil" options:NSRegularExpressionCaseInsensitive error:&error];
         NSArray* array_temp = [regex matchesInString:obj options:kNilOptions range:NSMakeRange(0, obj.length)];
         
         NSLog(@"%@",obj);
         NSLog(@"%@",@(array_temp.count));
-        if (array_temp.count == 2)
+        if (array_temp.count == 2 || array_temp.count == 1)
         {
             NSMutableArray* a = [final[@"Localizable"] mutableCopy];
             if (!a) {
@@ -59,9 +61,6 @@
         }
         
     }];
-    
-    
-    
 
     return [final copy];
 }
